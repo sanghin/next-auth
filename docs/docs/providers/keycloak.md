@@ -7,31 +7,47 @@ title: Keycloak
 
 https://www.keycloak.org/docs/latest/server_admin/#_oidc_clients
 
-## Configuration
-
-:::tip
-Create an openid-connect client in Keycloak with "confidential" as the "Access Type".
-:::
-
 ## Options
 
 The **Keycloak Provider** comes with a set of default options:
 
 - [Keycloak Provider options](https://github.com/nextauthjs/next-auth/blob/main/packages/next-auth/src/providers/keycloak.ts)
 
-You can override any of the options to suit your own use case.
-
 ## Example
+For confidential client:
 
 ```js
 import KeycloakProvider from "next-auth/providers/keycloak";
 ...
 providers: [
   KeycloakProvider({
+    clientAccessType: 'confidential',
     clientId: process.env.KEYCLOAK_ID,
     clientSecret: process.env.KEYCLOAK_SECRET,
     issuer: process.env.KEYCLOAK_ISSUER,
   })
+]
+...
+```
+
+For public client:
+
+```js
+import KeycloakProvider from "next-auth/providers/keycloak";
+...
+providers: [
+  {
+  ...KeycloakProvider({
+    clientSecret: '',
+    clientId: process.env.KEYCLOAK_ID,
+    issuer: process.env.KEYCLOAK_ISSUER,
+  }),
+  client: {
+    token_endpoint_auth_method: 'none',
+    introspection_endpoint_auth_method: 'none',
+    revocation_endpoint_auth_method: 'none',
+  },
+},
 ]
 ...
 ```

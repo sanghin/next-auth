@@ -138,7 +138,7 @@ export interface OAuthConfig<P> extends CommonProviderOptions, PartialIssuer {
    * We will perform a deep-merge of these values
    * with the default configuration.
    */
-  options?: OAuthUserConfig<P>
+  options?: OAuthUserConfig<P> | KeycloakOAuthUserConfig<P>
 
   // These are kept around for backwards compatibility with OAuth 1.x
   accessTokenUrl?: string
@@ -146,6 +146,19 @@ export interface OAuthConfig<P> extends CommonProviderOptions, PartialIssuer {
   profileUrl?: string
   encoding?: string
 }
+
+export type ConfidentialKeycloakOAuthUserConfig<P> = { clientAccessType: 'confidential' } &
+Omit<Partial<OAuthConfig<P>>,
+"options" | "type"> &
+Required<Pick<OAuthConfig<P>,
+"clientId" | "clientSecret">>
+
+export type PublicKeycloakOAuthUserConfig<P> = { clientAccessType: 'public' } &
+Omit<Partial<OAuthConfig<P>>,
+"options" | "type"> &
+Required<Pick<OAuthConfig<P>, "clientId">>
+
+export type KeycloakOAuthUserConfig<P> = ConfidentialKeycloakOAuthUserConfig<P> | PublicKeycloakOAuthUserConfig<P>
 
 export type OAuthUserConfig<P> = Omit<
   Partial<OAuthConfig<P>>,

@@ -1,4 +1,4 @@
-import type { OAuthConfig, OAuthUserConfig } from "."
+import type { OAuthConfig, KeycloakOAuthUserConfig } from "."
 
 export interface KeycloakProfile extends Record<string, any> {
   exp: number
@@ -25,7 +25,7 @@ export interface KeycloakProfile extends Record<string, any> {
 }
 
 export default function Keycloak<P extends KeycloakProfile>(
-  options: OAuthUserConfig<P>
+  options: KeycloakOAuthUserConfig<P>
 ): OAuthConfig<P> {
   return {
     id: "keycloak",
